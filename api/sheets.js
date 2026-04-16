@@ -10,8 +10,9 @@ const SHEET_HEADERS = {
     'content_calendar_url', 'created_at', 'updated_at',
   ],
   Content: [
-    'id', 'account_id', 'title', 'platform', 'type', 'status',
-    'due_date', 'published_date', 'notes', 'updated_at',
+    'id', 'account_id', 'week', 'day', 'platform', 'entry_type',
+    'content_pillar', 'visual_direction', 'creative_url',
+    'caption_en', 'caption_hr', 'hashtags', 'status', 'notes', 'updated_at',
   ],
   Payments: [
     'id', 'account_id', 'amount', 'currency', 'invoice_date', 'due_date',

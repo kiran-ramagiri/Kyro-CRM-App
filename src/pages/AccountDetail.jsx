@@ -14,8 +14,8 @@ import Modal from '../components/Modal'
 import {
   formatDate, formatCurrency, paymentStatus, statusBadgeClass,
   typeBadgeClass, generateId, today,
-  PLATFORMS, TEAM_MEMBERS, CONTENT_STATUSES, CONTENT_TYPES,
-  RECURRENCE_PERIODS,
+  PLATFORMS, TEAM_MEMBERS, CONTENT_STATUSES, RECURRENCE_PERIODS,
+  DAYS_OF_WEEK, ENTRY_TYPES, CONTENT_PILLARS, entryTypeBadgeClass,
 } from '../lib/utils'
 
 // ---------------------------------------------------------------------------
@@ -23,17 +23,21 @@ import {
 // ---------------------------------------------------------------------------
 function ContentForm({ initial, accountId, onSave, onClose }) {
   const [form, setForm] = useState({
-    title: '',
+    week: '1',
+    day: 'Monday',
     platform: 'Instagram',
-    type: 'Social Post',
+    entry_type: 'Post',
+    content_pillar: 'Product Promotion',
+    visual_direction: '',
+    creative_url: '',
+    caption_en: '',
+    caption_hr: '',
+    hashtags: '',
     status: 'Draft',
-    due_date: '',
-    published_date: '',
     notes: '',
     ...initial,
   })
   const [saving, setSaving] = useState(false)
-
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
   async function handleSubmit(e) {
@@ -41,14 +45,9 @@ function ContentForm({ initial, accountId, onSave, onClose }) {
     setSaving(true)
     try {
       if (initial?.id) {
-        await updateContent(initial.id, form)
+        await updateContent(initial.id, { ...form, updated_at: today() })
       } else {
-        await addContent({
-          ...form,
-          id: generateId(),
-          account_id: accountId,
-          updated_at: today(),
-        })
+        await addContent({ ...form, id: generateId(), account_id: accountId, updated_at: today() })
       }
       onSave()
       onClose()
@@ -58,47 +57,84 @@ function ContentForm({ initial, accountId, onSave, onClose }) {
   }
 
   const fieldCls = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300'
+  const labelCls = 'block text-xs font-medium text-slate-600 mb-1'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1">Title *</label>
-        <input required value={form.title} onChange={e => set('title', e.target.value)} className={fieldCls} />
-      </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Platform</label>
+          <label className={labelCls}>Week</label>
+          <select value={form.week} onChange={e => set('week', e.target.value)} className={fieldCls}>
+            {['1','2','3','4','5'].map(w => <option key={w} value={w}>Week {w}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={labelCls}>Day</label>
+          <select value={form.day} onChange={e => set('day', e.target.value)} className={fieldCls}>
+            {DAYS_OF_WEEK.map(d => <option key={d}>{d}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={labelCls}>Platform</label>
           <select value={form.platform} onChange={e => set('platform', e.target.value)} className={fieldCls}>
             {PLATFORMS.map(p => <option key={p}>{p}</option>)}
           </select>
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
-          <select value={form.type} onChange={e => set('type', e.target.value)} className={fieldCls}>
-            {CONTENT_TYPES.map(t => <option key={t}>{t}</option>)}
+          <label className={labelCls}>Entry Type</label>
+          <select value={form.entry_type} onChange={e => set('entry_type', e.target.value)} className={fieldCls}>
+            {ENTRY_TYPES.map(t => <option key={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={labelCls}>Content Pillar</label>
+          <select value={form.content_pillar} onChange={e => set('content_pillar', e.target.value)} className={fieldCls}>
+            {CONTENT_PILLARS.map(p => <option key={p}>{p}</option>)}
           </select>
         </div>
       </div>
+
+      <div>
+        <label className={labelCls}>Visual Direction</label>
+        <input value={form.visual_direction} onChange={e => set('visual_direction', e.target.value)} placeholder="e.g. menu picture, behind-the-scenes video…" className={fieldCls} />
+      </div>
+
+      <div>
+        <label className={labelCls}>Creative — Google Drive link</label>
+        <input type="url" value={form.creative_url} onChange={e => set('creative_url', e.target.value)} placeholder="https://drive.google.com/…" className={fieldCls} />
+      </div>
+
+      <div>
+        <label className={labelCls}>Caption (EN)</label>
+        <textarea rows={3} value={form.caption_en} onChange={e => set('caption_en', e.target.value)} className={fieldCls} />
+      </div>
+
+      <div>
+        <label className={labelCls}>Caption (HR)</label>
+        <textarea rows={3} value={form.caption_hr} onChange={e => set('caption_hr', e.target.value)} className={fieldCls} />
+      </div>
+
+      <div>
+        <label className={labelCls}>Hashtags</label>
+        <textarea rows={2} value={form.hashtags} onChange={e => set('hashtags', e.target.value)} placeholder="#tag1 #tag2 #tag3" className={fieldCls} />
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Status</label>
+          <label className={labelCls}>Status</label>
           <select value={form.status} onChange={e => set('status', e.target.value)} className={fieldCls}>
             {CONTENT_STATUSES.map(s => <option key={s}>{s}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Due Date</label>
-          <input type="date" value={form.due_date} onChange={e => set('due_date', e.target.value)} className={fieldCls} />
+          <label className={labelCls}>Notes</label>
+          <input value={form.notes} onChange={e => set('notes', e.target.value)} className={fieldCls} />
         </div>
       </div>
-      <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1">Published Date</label>
-        <input type="date" value={form.published_date} onChange={e => set('published_date', e.target.value)} className={fieldCls} />
-      </div>
-      <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
-        <textarea rows={2} value={form.notes} onChange={e => set('notes', e.target.value)} className={fieldCls} />
-      </div>
+
       <div className="flex justify-end gap-2 pt-2">
         <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900">Cancel</button>
         <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg disabled:opacity-50">
@@ -311,24 +347,36 @@ function OverviewTab({ account }) {
 }
 
 // ---------------------------------------------------------------------------
-// Tab: Content
+// Tab: Content Calendar
 // ---------------------------------------------------------------------------
+const DAY_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
 function ContentTab({ account, content, onRefresh }) {
-  const [modal, setModal] = useState(null) // null | { mode: 'add'|'edit', item? }
+  const [modal, setModal] = useState(null)
+  const [filterWeek, setFilterWeek] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterPlatform, setFilterPlatform] = useState('')
+  const [expanded, setExpanded] = useState(null) // expanded row id
   const [deleting, setDeleting] = useState(null)
 
   const accountContent = content.filter(c => c.account_id === account.id)
+
+  const weeks = [...new Set(accountContent.map(c => c.week).filter(Boolean))].sort((a,b) => Number(a)-Number(b))
+
   const filtered = accountContent.filter(c => {
+    if (filterWeek && c.week !== filterWeek) return false
     if (filterStatus && c.status !== filterStatus) return false
     if (filterPlatform && c.platform !== filterPlatform) return false
     return true
+  }).sort((a, b) => {
+    const wDiff = Number(a.week) - Number(b.week)
+    if (wDiff !== 0) return wDiff
+    return DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day)
   })
 
   async function handleToggleStatus(item) {
     const next = { Draft: 'In Review', 'In Review': 'Published', Published: 'Draft' }
-    await updateContent(item.id, { status: next[item.status] || 'Draft' })
+    await updateContent(item.id, { status: next[item.status] || 'Draft', updated_at: today() })
     onRefresh()
   }
 
@@ -340,23 +388,21 @@ function ContentTab({ account, content, onRefresh }) {
     setDeleting(null)
   }
 
+  const selCls = 'px-3 py-1.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-violet-300'
+
   return (
     <div>
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        <select
-          value={filterStatus}
-          onChange={e => setFilterStatus(e.target.value)}
-          className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-violet-300"
-        >
+        <select value={filterWeek} onChange={e => setFilterWeek(e.target.value)} className={selCls}>
+          <option value="">All weeks</option>
+          {weeks.map(w => <option key={w} value={w}>Week {w}</option>)}
+        </select>
+        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className={selCls}>
           <option value="">All statuses</option>
           {CONTENT_STATUSES.map(s => <option key={s}>{s}</option>)}
         </select>
-        <select
-          value={filterPlatform}
-          onChange={e => setFilterPlatform(e.target.value)}
-          className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-violet-300"
-        >
+        <select value={filterPlatform} onChange={e => setFilterPlatform(e.target.value)} className={selCls}>
           <option value="">All platforms</option>
           {PLATFORMS.map(p => <option key={p}>{p}</option>)}
         </select>
@@ -364,81 +410,121 @@ function ContentTab({ account, content, onRefresh }) {
           onClick={() => setModal({ mode: 'add' })}
           className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          <Plus size={15} /> Add Content
+          <Plus size={15} /> Add Entry
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-12 text-slate-400">
-          <p className="text-sm">No content pieces yet.</p>
-        </div>
+        <div className="text-center py-12 text-slate-400 text-sm">No content entries yet.</div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-xl border border-slate-100 overflow-x-auto">
+          <table className="w-full text-sm min-w-[900px]">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 uppercase tracking-wide">
-                <th className="text-left px-4 py-3">Title</th>
-                <th className="text-left px-4 py-3">Platform</th>
-                <th className="text-left px-4 py-3">Type</th>
-                <th className="text-left px-4 py-3">Status</th>
-                <th className="text-left px-4 py-3">Due</th>
-                <th className="text-left px-4 py-3">Published</th>
-                <th className="px-4 py-3" />
+                <th className="text-left px-4 py-3 w-16">Week</th>
+                <th className="text-left px-4 py-3 w-24">Day</th>
+                <th className="text-left px-4 py-3 w-24">Platform</th>
+                <th className="text-left px-4 py-3 w-20">Type</th>
+                <th className="text-left px-4 py-3">Content Pillar</th>
+                <th className="text-left px-4 py-3">Visual Direction</th>
+                <th className="text-left px-4 py-3 w-20">Creative</th>
+                <th className="text-left px-4 py-3 w-24">Status</th>
+                <th className="px-4 py-3 w-20" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {filtered.map(item => (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-800">{item.title}</td>
-                  <td className="px-4 py-3 text-slate-600">{item.platform}</td>
-                  <td className="px-4 py-3 text-slate-600">{item.type}</td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => handleToggleStatus(item)}
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity ${statusBadgeClass(item.status)}`}
-                      title="Click to advance status"
-                    >
-                      {item.status}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 text-slate-500">{formatDate(item.due_date)}</td>
-                  <td className="px-4 py-3 text-slate-500">{formatDate(item.published_date)}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 justify-end">
+                <>
+                  <tr
+                    key={item.id}
+                    className="hover:bg-slate-50 transition-colors cursor-pointer"
+                    onClick={() => setExpanded(expanded === item.id ? null : item.id)}
+                  >
+                    <td className="px-4 py-3 text-slate-500 font-medium">{item.week}</td>
+                    <td className="px-4 py-3 text-slate-600">{item.day}</td>
+                    <td className="px-4 py-3 text-slate-600">{item.platform}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${entryTypeBadgeClass(item.entry_type)}`}>
+                        {item.entry_type}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">{item.content_pillar}</td>
+                    <td className="px-4 py-3 text-slate-700 max-w-[200px] truncate">{item.visual_direction}</td>
+                    <td className="px-4 py-3">
+                      {item.creative_url
+                        ? <a href={item.creative_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="flex items-center gap-1 text-violet-600 hover:underline text-xs"><ExternalLink size={12} /> View</a>
+                        : <span className="text-slate-300 text-xs">—</span>
+                      }
+                    </td>
+                    <td className="px-4 py-3">
                       <button
-                        onClick={() => setModal({ mode: 'edit', item })}
-                        className="p-1.5 text-slate-400 hover:text-violet-600 rounded hover:bg-violet-50 transition-colors"
+                        onClick={e => { e.stopPropagation(); handleToggleStatus(item) }}
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity ${statusBadgeClass(item.status)}`}
+                        title="Click to advance status"
                       >
-                        <Edit2 size={14} />
+                        {item.status}
                       </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        disabled={deleting === item.id}
-                        className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-red-50 transition-colors disabled:opacity-40"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1 justify-end">
+                        <button
+                          onClick={e => { e.stopPropagation(); setModal({ mode: 'edit', item }) }}
+                          className="p-1.5 text-slate-400 hover:text-violet-600 rounded hover:bg-violet-50 transition-colors"
+                        >
+                          <Edit2 size={14} />
+                        </button>
+                        <button
+                          onClick={e => { e.stopPropagation(); handleDelete(item.id) }}
+                          disabled={deleting === item.id}
+                          className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-red-50 transition-colors disabled:opacity-40"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {expanded === item.id && (
+                    <tr key={`${item.id}-exp`} className="bg-slate-50/70">
+                      <td colSpan={9} className="px-6 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          {item.caption_en && (
+                            <div>
+                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Caption (EN)</p>
+                              <p className="text-slate-700 whitespace-pre-wrap">{item.caption_en}</p>
+                            </div>
+                          )}
+                          {item.caption_hr && (
+                            <div>
+                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Caption (HR)</p>
+                              <p className="text-slate-700 whitespace-pre-wrap">{item.caption_hr}</p>
+                            </div>
+                          )}
+                          {item.hashtags && (
+                            <div>
+                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Hashtags</p>
+                              <p className="text-violet-600 text-xs">{item.hashtags}</p>
+                            </div>
+                          )}
+                          {item.notes && (
+                            <div>
+                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Notes</p>
+                              <p className="text-slate-600">{item.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* Content modal */}
       {modal && (
-        <Modal
-          title={modal.mode === 'add' ? 'Add Content' : 'Edit Content'}
-          onClose={() => setModal(null)}
-        >
-          <ContentForm
-            initial={modal.item}
-            accountId={account.id}
-            onSave={onRefresh}
-            onClose={() => setModal(null)}
-          />
+        <Modal title={modal.mode === 'add' ? 'Add Content Entry' : 'Edit Content Entry'} onClose={() => setModal(null)} size="lg">
+          <ContentForm initial={modal.item} accountId={account.id} onSave={onRefresh} onClose={() => setModal(null)} />
         </Modal>
       )}
     </div>

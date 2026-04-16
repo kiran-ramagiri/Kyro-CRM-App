@@ -65,8 +65,21 @@ export const TEAM_MEMBERS = ['Kiran', 'Rebeka']
 export const ACCOUNT_TYPES = ['Client', 'Personal Brand']
 
 export const CONTENT_STATUSES = ['Draft', 'In Review', 'Published']
-export const CONTENT_TYPES = ['Social Post', 'Paid Ad']
 export const RECURRENCE_PERIODS = ['Monthly', 'Quarterly', 'One-time']
+
+export const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+export const ENTRY_TYPES = ['Post', 'Story', 'Reel', 'GMB']
+export const CONTENT_PILLARS = ['Product Promotion', 'Lifestyle', 'Community', 'Traffic-Driving', 'Atmosphere', 'Other']
+
+export function entryTypeBadgeClass(type) {
+  switch (type) {
+    case 'Post':  return 'bg-green-100 text-green-700'
+    case 'Story': return 'bg-amber-100 text-amber-700'
+    case 'Reel':  return 'bg-blue-100 text-blue-700'
+    case 'GMB':   return 'bg-purple-100 text-purple-700'
+    default:      return 'bg-slate-100 text-slate-600'
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Status badge styles
