@@ -21,7 +21,7 @@ import {
 // ---------------------------------------------------------------------------
 // Content form (inside modal)
 // ---------------------------------------------------------------------------
-function ContentForm({ initial, accountId, onSave, onClose }) {
+function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
   const [form, setForm] = useState({
     week: '1',
     day: 'Monday',
@@ -47,7 +47,7 @@ function ContentForm({ initial, accountId, onSave, onClose }) {
       if (initial?.id) {
         await updateContent(initial.id, { ...form, updated_at: today() })
       } else {
-        await addContent({ ...form, id: generateId(), account_id: accountId, updated_at: today() })
+        await addContent({ ...form, id: generateId(), account_id: accountId, account_name: accountName, updated_at: today() })
       }
       onSave()
       onClose()
@@ -524,7 +524,7 @@ function ContentTab({ account, content, onRefresh }) {
 
       {modal && (
         <Modal title={modal.mode === 'add' ? 'Add Content Entry' : 'Edit Content Entry'} onClose={() => setModal(null)} size="lg">
-          <ContentForm initial={modal.item} accountId={account.id} onSave={onRefresh} onClose={() => setModal(null)} />
+          <ContentForm initial={modal.item} accountId={account.id} accountName={account.name} onSave={onRefresh} onClose={() => setModal(null)} />
         </Modal>
       )}
     </div>
