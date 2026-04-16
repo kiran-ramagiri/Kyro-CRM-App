@@ -4,23 +4,30 @@
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
   body {
-    @apply bg-[#060b18] text-[#dce8ff] antialiased;
+    background-color: #0a0a0b;
+    color: #f0f0ed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
   }
 
   /* Dark scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #060b18; }
-  ::-webkit-scrollbar-thumb { background: #1a2d4e; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #243d68; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #0a0a0b; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #383838; }
 
-  /* Dark native inputs */
+  /* Dark native select options */
   select option {
-    background-color: #0c1428;
-    color: #dce8ff;
+    background-color: #0c0c14;
+    color: #f0f0ed;
   }
 }
 
@@ -28,10 +35,12 @@
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-  .glow-blue {
-    box-shadow: 0 0 20px rgba(59,130,246,0.15);
+  .font-display { font-family: 'Syne', sans-serif; }
+
+  .glow-yellow {
+    box-shadow: 0 0 20px rgba(212, 217, 63, 0.12);
   }
-  .glow-blue-sm {
-    box-shadow: 0 0 10px rgba(59,130,246,0.1);
+  .glow-yellow-sm {
+    box-shadow: 0 0 10px rgba(212, 217, 63, 0.08);
   }
 }

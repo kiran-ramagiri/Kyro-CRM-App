@@ -31,7 +31,7 @@ function AddPaymentModal({ accounts, onSave, onClose }) {
   const [saving, setSaving] = useState(false)
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
-  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50'
+  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50'
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -48,7 +48,7 @@ function AddPaymentModal({ accounts, onSave, onClose }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Account *</label>
+        <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Account *</label>
         <select required value={form.account_id} onChange={e => set('account_id', e.target.value)} className={fieldCls}>
           <option value="">Select account…</option>
           {accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
@@ -56,61 +56,61 @@ function AddPaymentModal({ accounts, onSave, onClose }) {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Amount *</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Amount *</label>
           <input required type="number" step="0.01" value={form.amount} onChange={e => set('amount', e.target.value)} className={fieldCls} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Currency</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Currency</label>
           <input value={form.currency} onChange={e => set('currency', e.target.value)} className={fieldCls} />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Invoice Date</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Invoice Date</label>
           <input type="date" value={form.invoice_date} onChange={e => set('invoice_date', e.target.value)} className={fieldCls} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Due Date</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Due Date</label>
           <input type="date" value={form.due_date} onChange={e => set('due_date', e.target.value)} className={fieldCls} />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Recurrence</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Recurrence</label>
           <select value={form.recurrence_period} onChange={e => set('recurrence_period', e.target.value)} className={fieldCls}>
             {RECURRENCE_PERIODS.map(r => <option key={r}>{r}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Assigned To</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Assigned To</label>
           <select value={form.assigned_to} onChange={e => set('assigned_to', e.target.value)} className={fieldCls}>
             {TEAM_MEMBERS.map(m => <option key={m}>{m}</option>)}
           </select>
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <label className="flex items-center gap-2 text-sm text-[#dce8ff] cursor-pointer">
-          <input type="checkbox" checked={!!form.paid} onChange={e => set('paid', e.target.checked)} className="rounded accent-blue-500" />
+        <label className="flex items-center gap-2 text-sm text-[#f0f0ed] cursor-pointer">
+          <input type="checkbox" checked={!!form.paid} onChange={e => set('paid', e.target.checked)} className="rounded accent-[#d4d93f]" />
           Already Paid
         </label>
-        <label className="flex items-center gap-2 text-sm text-[#dce8ff] cursor-pointer">
-          <input type="checkbox" checked={!!form.recurring} onChange={e => set('recurring', e.target.checked)} className="rounded accent-blue-500" />
+        <label className="flex items-center gap-2 text-sm text-[#f0f0ed] cursor-pointer">
+          <input type="checkbox" checked={!!form.recurring} onChange={e => set('recurring', e.target.checked)} className="rounded accent-[#d4d93f]" />
           Recurring
         </label>
       </div>
       {form.paid && (
         <div>
-          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Paid Date</label>
+          <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Paid Date</label>
           <input type="date" value={form.paid_date} onChange={e => set('paid_date', e.target.value)} className={fieldCls} />
         </div>
       )}
       <div>
-        <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Notes</label>
+        <label className="block text-xs font-medium text-[#6b6b6b] mb-1">Notes</label>
         <textarea rows={2} value={form.notes} onChange={e => set('notes', e.target.value)} className={fieldCls} />
       </div>
       <div className="flex justify-end gap-2 pt-2">
-        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-[#7a9cc0] hover:text-[#dce8ff]">Cancel</button>
-        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-lg disabled:opacity-50">
+        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-[#6b6b6b] hover:text-[#f0f0ed]">Cancel</button>
+        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-semibold font-display bg-[#d4d93f] hover:bg-[#bfc42e] text-[#0a0a0b] rounded-lg disabled:opacity-50">
           {saving ? 'Saving…' : 'Add Payment'}
         </button>
       </div>
@@ -124,7 +124,7 @@ function AddPaymentModal({ accounts, onSave, onClose }) {
 function SortButton({ col, label, current, dir, onClick }) {
   const active = current === col
   return (
-    <button onClick={() => onClick(col)} className="flex items-center gap-0.5 group text-[#4a6080] hover:text-[#dce8ff]">
+    <button onClick={() => onClick(col)} className="flex items-center gap-0.5 group text-[#555] hover:text-[#f0f0ed]">
       {label || col}
       <span className="ml-1 opacity-40 group-hover:opacity-80">
         {active && dir === 'asc' ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
@@ -226,27 +226,27 @@ export default function PaymentsPage() {
   const totalOutstanding = totalInvoiced - totalPaid
 
   const statusIcon = (s) => {
-    if (s === 'paid')     return <CheckCircle size={13} className="text-green-500" />
-    if (s === 'overdue')  return <AlertCircle size={13} className="text-red-500" />
-    if (s === 'due-soon') return <Clock size={13} className="text-amber-500" />
+    if (s === 'paid')     return <CheckCircle size={13} className="text-emerald-400" />
+    if (s === 'overdue')  return <AlertCircle size={13} className="text-red-400" />
+    if (s === 'due-soon') return <Clock size={13} className="text-amber-400" />
     return null
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#060b18]">
-        <RefreshCw size={24} className="animate-spin text-blue-400" />
+      <div className="flex items-center justify-center min-h-screen bg-[#0a0a0b]">
+        <RefreshCw size={24} className="animate-spin text-[#d4d93f]" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="p-8 bg-[#060b18] min-h-screen">
+      <div className="p-8 bg-[#0a0a0b] min-h-screen">
         <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5 text-red-400">
           <p className="font-semibold">Failed to load payments</p>
           <p className="text-sm mt-1">{error}</p>
-          <button onClick={load} className="mt-3 text-sm underline">Try again</button>
+          <button onClick={load} className="mt-3 text-sm underline text-[#555] hover:text-[#f0f0ed]">Try again</button>
         </div>
       </div>
     )
@@ -257,12 +257,12 @@ export default function PaymentsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#dce8ff]">Payments</h1>
-          <p className="text-sm text-[#4a6080] mt-1">Full invoice ledger across all accounts</p>
+          <h1 className="text-2xl font-display font-bold text-[#f0f0ed]">Payments</h1>
+          <p className="text-sm text-[#6b6b6b] mt-1">Full invoice ledger across all accounts</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#d4d93f] hover:bg-[#bfc42e] text-[#0a0a0b] rounded-lg text-sm font-semibold font-display transition-colors"
         >
           <Plus size={16} /> New Payment
         </button>
@@ -271,13 +271,13 @@ export default function PaymentsPage() {
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Total Invoiced', value: formatCurrency(totalInvoiced), color: 'text-[#dce8ff]' },
-          { label: 'Total Paid',     value: formatCurrency(totalPaid),      color: 'text-green-400' },
-          { label: 'Outstanding',    value: formatCurrency(totalOutstanding), color: totalOutstanding > 0 ? 'text-red-400' : 'text-[#dce8ff]' },
+          { label: 'Total Invoiced', value: formatCurrency(totalInvoiced), color: 'text-[#f0f0ed]' },
+          { label: 'Total Paid',     value: formatCurrency(totalPaid),      color: 'text-emerald-400' },
+          { label: 'Outstanding',    value: formatCurrency(totalOutstanding), color: totalOutstanding > 0 ? 'text-red-400' : 'text-[#f0f0ed]' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] px-5 py-4">
-            <p className="text-xs text-[#4a6080] mb-1">{label}</p>
-            <p className={`text-2xl font-bold ${color}`}>{value}</p>
+          <div key={label} className="bg-[#0c0c14] rounded-xl border border-[#2a2a2a] px-5 py-4">
+            <p className="text-xs text-[#6b6b6b] mb-1">{label}</p>
+            <p className={`text-2xl font-display font-bold ${color}`}>{value}</p>
           </div>
         ))}
       </div>
@@ -313,19 +313,19 @@ export default function PaymentsPage() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-4">
         <div className="relative flex-1 min-w-48">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a6080]" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
           <input
             type="text"
             placeholder="Search by account…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
+            className="w-full pl-9 pr-4 py-2 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50"
           />
         </div>
         <select
           value={filterStatus}
           onChange={e => setFilterStatus(e.target.value)}
-          className="px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
+          className="px-3 py-2 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50"
         >
           <option value="">All statuses</option>
           <option value="overdue">Overdue</option>
@@ -336,7 +336,7 @@ export default function PaymentsPage() {
         <select
           value={filterMember}
           onChange={e => setFilterMember(e.target.value)}
-          className="px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
+          className="px-3 py-2 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50"
         >
           <option value="">All team members</option>
           {TEAM_MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
@@ -344,7 +344,7 @@ export default function PaymentsPage() {
         {(search || filterStatus || filterMember) && (
           <button
             onClick={() => { setSearch(''); setFilterStatus(''); setFilterMember('') }}
-            className="px-3 py-2 text-sm text-[#7a9cc0] hover:text-[#dce8ff] underline"
+            className="px-3 py-2 text-sm text-[#555] hover:text-[#f0f0ed] underline"
           >
             Clear
           </button>
@@ -353,14 +353,14 @@ export default function PaymentsPage() {
 
       {/* Table */}
       {sorted.length === 0 ? (
-        <div className="text-center py-20 text-[#4a6080]">
+        <div className="text-center py-20 text-[#555]">
           <p className="text-sm">No payments found.</p>
         </div>
       ) : (
-        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] overflow-hidden">
+        <div className="bg-[#0c0c14] rounded-xl border border-[#2a2a2a] overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#0f1a35] text-xs font-medium text-[#4a6080] uppercase tracking-wide border-b border-[#1a2d4e]">
+              <tr className="bg-[#111114] text-xs font-medium text-[#555] uppercase tracking-wide border-b border-[#2a2a2a]">
                 <th className="text-left px-4 py-3">
                   <SortButton col="accountName" label="Account" current={sortCol} dir={sortDir} onClick={toggleSort} />
                 </th>
@@ -381,28 +381,28 @@ export default function PaymentsPage() {
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1a2d4e]">
+            <tbody className="divide-y divide-[#2a2a2a]">
               {sorted.map(p => {
                 const rowCls = p._status === 'overdue'
-                  ? 'bg-red-500/5 hover:bg-[#0f1a35]'
+                  ? 'bg-red-500/5 hover:bg-[#111114]'
                   : p._status === 'due-soon'
-                  ? 'bg-amber-500/5 hover:bg-[#0f1a35]'
-                  : 'hover:bg-[#0f1a35]'
+                  ? 'bg-amber-500/5 hover:bg-[#111114]'
+                  : 'hover:bg-[#111114]'
                 return (
                   <tr key={p.id} className={`transition-colors ${rowCls}`}>
                     <td className="px-4 py-3">
                       <button
                         onClick={() => navigate(`/account/${p.account_id}`)}
-                        className="font-medium text-[#dce8ff] hover:text-blue-400 hover:underline text-left"
+                        className="font-medium text-[#f0f0ed] hover:text-[#d4d93f] hover:underline text-left"
                       >
                         {p.accountName}
                       </button>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-[#dce8ff]">
+                    <td className="px-4 py-3 font-semibold text-[#f0f0ed]">
                       {formatCurrency(p.amount, p.currency)}
                     </td>
-                    <td className="px-4 py-3 text-[#7a9cc0]">{formatDate(p.invoice_date)}</td>
-                    <td className="px-4 py-3 text-[#7a9cc0]">{formatDate(p.due_date)}</td>
+                    <td className="px-4 py-3 text-[#6b6b6b]">{formatDate(p.invoice_date)}</td>
+                    <td className="px-4 py-3 text-[#6b6b6b]">{formatDate(p.due_date)}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         {statusIcon(p._status)}
@@ -411,10 +411,10 @@ export default function PaymentsPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[#7a9cc0]">
+                    <td className="px-4 py-3 text-[#6b6b6b]">
                       {p.recurring ? p.recurrence_period : 'One-time'}
                     </td>
-                    <td className="px-4 py-3 text-[#7a9cc0]">{p.assigned_to}</td>
+                    <td className="px-4 py-3 text-[#6b6b6b]">{p.assigned_to}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
                         <button
@@ -423,8 +423,8 @@ export default function PaymentsPage() {
                           title={p.paid ? 'Mark unpaid' : 'Mark paid'}
                           className={`p-1.5 rounded transition-colors disabled:opacity-40 ${
                             p.paid
-                              ? 'text-green-500 hover:text-green-400 hover:bg-green-500/10'
-                              : 'text-[#4a6080] hover:text-green-400 hover:bg-green-500/10'
+                              ? 'text-emerald-400 hover:bg-emerald-500/10'
+                              : 'text-[#555] hover:text-emerald-400 hover:bg-emerald-500/10'
                           }`}
                         >
                           <CheckCircle size={16} />
@@ -436,7 +436,7 @@ export default function PaymentsPage() {
               })}
             </tbody>
           </table>
-          <div className="px-4 py-3 bg-[#0f1a35] border-t border-[#1a2d4e] text-xs text-[#4a6080]">
+          <div className="px-4 py-3 bg-[#111114] border-t border-[#2a2a2a] text-xs text-[#555]">
             {sorted.length} payment{sorted.length !== 1 ? 's' : ''}
             {filtered.length !== payments.length && ` (filtered from ${payments.length})`}
           </div>

@@ -17,21 +17,19 @@ export default function Modal({ title, onClose, children, size = 'md' }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className={`w-full ${widthClass} bg-[#0c1428] border border-[#1a2d4e] rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1a2d4e]">
-          <h2 className="text-base font-semibold text-[#dce8ff]">{title}</h2>
+      <div className={`w-full ${widthClass} bg-[#0c0c14] border border-[#2a2a2a] rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2a]">
+          <h2 className="text-base font-semibold text-[#f0f0ed] font-display">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-[#0f1a35] text-[#4a6080] hover:text-[#dce8ff] transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[#111114] text-[#555] hover:text-[#f0f0ed] transition-colors"
           >
             <X size={17} />
           </button>
         </div>
-        {/* Body */}
         <div className="overflow-y-auto flex-1 px-6 py-5">
           {children}
         </div>

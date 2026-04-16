@@ -7,24 +7,21 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'sans-serif'],
+        sans:    ['DM Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
-        dark: {
-          bg:      '#060b18',
-          surface: '#0c1428',
-          card:    '#0f1a35',
-          border:  '#1a2d4e',
-          border2: '#243d68',
-          muted:   '#4a6080',
-          text:    '#dce8ff',
-          subtext: '#7a9cc0',
-        },
-        brand: {
-          DEFAULT: '#3b82f6',
-          hover:   '#2563eb',
-          muted:   '#1e3a5f',
-          glow:    'rgba(59,130,246,0.15)',
+        kyro: {
+          bg:      '#0a0a0b',
+          surface: '#0c0c14',
+          card:    '#111114',
+          border:  '#2a2a2a',
+          border2: '#383838',
+          muted:   '#555555',
+          sub:     '#6b6b6b',
+          text:    '#f0f0ed',
+          yellow:  '#d4d93f',
+          navy:    '#200f8c',
         },
       },
     },
