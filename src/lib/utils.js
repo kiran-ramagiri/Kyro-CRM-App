@@ -71,34 +71,34 @@ export const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
 export const ENTRY_TYPES = ['Post', 'Story', 'Reel', 'GMB']
 export const CONTENT_PILLARS = ['Product Promotion', 'Lifestyle', 'Community', 'Traffic-Driving', 'Atmosphere', 'Other']
 
-export function entryTypeBadgeClass(type) {
-  switch (type) {
-    case 'Post':  return 'bg-green-100 text-green-700'
-    case 'Story': return 'bg-amber-100 text-amber-700'
-    case 'Reel':  return 'bg-blue-100 text-blue-700'
-    case 'GMB':   return 'bg-purple-100 text-purple-700'
-    default:      return 'bg-slate-100 text-slate-600'
-  }
-}
-
 // ---------------------------------------------------------------------------
 // Status badge styles
 // ---------------------------------------------------------------------------
 export function statusBadgeClass(status) {
   switch (status) {
-    case 'Draft':       return 'bg-slate-100 text-slate-600'
-    case 'In Review':   return 'bg-blue-100 text-blue-700'
-    case 'Published':   return 'bg-green-100 text-green-700'
-    case 'paid':        return 'bg-green-100 text-green-700'
-    case 'overdue':     return 'bg-red-100 text-red-700'
-    case 'due-soon':    return 'bg-amber-100 text-amber-700'
-    case 'unpaid':      return 'bg-slate-100 text-slate-600'
-    default:            return 'bg-slate-100 text-slate-600'
+    case 'Draft':       return 'bg-[#1a2d4e] text-[#7a9cc0] border border-[#243d68]'
+    case 'In Review':   return 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+    case 'Published':   return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case 'paid':        return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case 'overdue':     return 'bg-red-500/10 text-red-400 border border-red-500/20'
+    case 'due-soon':    return 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+    case 'unpaid':      return 'bg-[#1a2d4e] text-[#7a9cc0] border border-[#243d68]'
+    default:            return 'bg-[#1a2d4e] text-[#7a9cc0] border border-[#243d68]'
   }
 }
 
 export function typeBadgeClass(type) {
   return type === 'Client'
-    ? 'bg-violet-100 text-violet-700'
-    : 'bg-sky-100 text-sky-700'
+    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+    : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+}
+
+export function entryTypeBadgeClass(type) {
+  switch (type) {
+    case 'Post':  return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case 'Story': return 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+    case 'Reel':  return 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+    case 'GMB':   return 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+    default:      return 'bg-[#1a2d4e] text-[#7a9cc0] border border-[#243d68]'
+  }
 }

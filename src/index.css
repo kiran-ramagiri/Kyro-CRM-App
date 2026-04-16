@@ -8,16 +8,30 @@
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-[#060b18] text-[#dce8ff] antialiased;
+  }
+
+  /* Dark scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #060b18; }
+  ::-webkit-scrollbar-thumb { background: #1a2d4e; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #243d68; }
+
+  /* Dark native inputs */
+  select option {
+    background-color: #0c1428;
+    color: #dce8ff;
   }
 }
 
 @layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59,130,246,0.15);
   }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  .glow-blue-sm {
+    box-shadow: 0 0 10px rgba(59,130,246,0.1);
   }
 }

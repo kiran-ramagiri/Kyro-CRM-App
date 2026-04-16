@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
 export default function Modal({ title, onClose, children, size = 'md' }) {
-  // Close on Escape
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
@@ -18,21 +17,20 @@ export default function Modal({ title, onClose, children, size = 'md' }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className={`w-full ${widthClass} bg-white rounded-xl shadow-xl flex flex-col max-h-[90vh]`}>
+      <div className={`w-full ${widthClass} bg-[#0c1428] border border-[#1a2d4e] rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="text-base font-semibold text-slate-900">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1a2d4e]">
+          <h2 className="text-base font-semibold text-[#dce8ff]">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[#0f1a35] text-[#4a6080] hover:text-[#dce8ff] transition-colors"
           >
-            <X size={18} />
+            <X size={17} />
           </button>
         </div>
-
         {/* Body */}
         <div className="overflow-y-auto flex-1 px-6 py-5">
           {children}

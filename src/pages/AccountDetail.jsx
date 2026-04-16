@@ -56,8 +56,8 @@ function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
     }
   }
 
-  const fieldCls = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300'
-  const labelCls = 'block text-xs font-medium text-slate-600 mb-1'
+  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50'
+  const labelCls = 'block text-xs font-medium text-[#7a9cc0] mb-1'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -65,19 +65,19 @@ function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
         <div>
           <label className={labelCls}>Week</label>
           <select value={form.week} onChange={e => set('week', e.target.value)} className={fieldCls}>
-            {['1','2','3','4','5'].map(w => <option key={w} value={w}>Week {w}</option>)}
+            {['1','2','3','4','5'].map(w => <option key={w} value={w} className="bg-[#0c1428]">Week {w}</option>)}
           </select>
         </div>
         <div>
           <label className={labelCls}>Day</label>
           <select value={form.day} onChange={e => set('day', e.target.value)} className={fieldCls}>
-            {DAYS_OF_WEEK.map(d => <option key={d}>{d}</option>)}
+            {DAYS_OF_WEEK.map(d => <option key={d} className="bg-[#0c1428]">{d}</option>)}
           </select>
         </div>
         <div>
           <label className={labelCls}>Platform</label>
           <select value={form.platform} onChange={e => set('platform', e.target.value)} className={fieldCls}>
-            {PLATFORMS.map(p => <option key={p}>{p}</option>)}
+            {PLATFORMS.map(p => <option key={p} className="bg-[#0c1428]">{p}</option>)}
           </select>
         </div>
       </div>
@@ -86,13 +86,13 @@ function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
         <div>
           <label className={labelCls}>Entry Type</label>
           <select value={form.entry_type} onChange={e => set('entry_type', e.target.value)} className={fieldCls}>
-            {ENTRY_TYPES.map(t => <option key={t}>{t}</option>)}
+            {ENTRY_TYPES.map(t => <option key={t} className="bg-[#0c1428]">{t}</option>)}
           </select>
         </div>
         <div>
           <label className={labelCls}>Content Pillar</label>
           <select value={form.content_pillar} onChange={e => set('content_pillar', e.target.value)} className={fieldCls}>
-            {CONTENT_PILLARS.map(p => <option key={p}>{p}</option>)}
+            {CONTENT_PILLARS.map(p => <option key={p} className="bg-[#0c1428]">{p}</option>)}
           </select>
         </div>
       </div>
@@ -126,7 +126,7 @@ function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
         <div>
           <label className={labelCls}>Status</label>
           <select value={form.status} onChange={e => set('status', e.target.value)} className={fieldCls}>
-            {CONTENT_STATUSES.map(s => <option key={s}>{s}</option>)}
+            {CONTENT_STATUSES.map(s => <option key={s} className="bg-[#0c1428]">{s}</option>)}
           </select>
         </div>
         <div>
@@ -136,8 +136,8 @@ function ContentForm({ initial, accountId, accountName, onSave, onClose }) {
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
-        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900">Cancel</button>
-        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg disabled:opacity-50">
+        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-[#7a9cc0] hover:text-[#dce8ff]">Cancel</button>
+        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-lg disabled:opacity-50">
           {saving ? 'Saving…' : 'Save'}
         </button>
       </div>
@@ -186,67 +186,67 @@ function PaymentForm({ initial, accountId, onSave, onClose }) {
     }
   }
 
-  const fieldCls = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300'
+  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Amount *</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Amount *</label>
           <input required type="number" step="0.01" value={form.amount} onChange={e => set('amount', e.target.value)} className={fieldCls} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Currency</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Currency</label>
           <input value={form.currency} onChange={e => set('currency', e.target.value)} className={fieldCls} />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Invoice Date</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Invoice Date</label>
           <input type="date" value={form.invoice_date} onChange={e => set('invoice_date', e.target.value)} className={fieldCls} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Due Date</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Due Date</label>
           <input type="date" value={form.due_date} onChange={e => set('due_date', e.target.value)} className={fieldCls} />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Recurrence</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Recurrence</label>
           <select value={form.recurrence_period} onChange={e => set('recurrence_period', e.target.value)} className={fieldCls}>
-            {RECURRENCE_PERIODS.map(r => <option key={r}>{r}</option>)}
+            {RECURRENCE_PERIODS.map(r => <option key={r} className="bg-[#0c1428]">{r}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Assigned To</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Assigned To</label>
           <select value={form.assigned_to} onChange={e => set('assigned_to', e.target.value)} className={fieldCls}>
-            {TEAM_MEMBERS.map(m => <option key={m}>{m}</option>)}
+            {TEAM_MEMBERS.map(m => <option key={m} className="bg-[#0c1428]">{m}</option>)}
           </select>
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-          <input type="checkbox" checked={!!form.paid} onChange={e => set('paid', e.target.checked)} className="rounded accent-violet-600" />
+        <label className="flex items-center gap-2 text-sm text-[#dce8ff] cursor-pointer">
+          <input type="checkbox" checked={!!form.paid} onChange={e => set('paid', e.target.checked)} className="rounded accent-blue-600" />
           Paid
         </label>
-        <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-          <input type="checkbox" checked={!!form.recurring} onChange={e => set('recurring', e.target.checked)} className="rounded accent-violet-600" />
+        <label className="flex items-center gap-2 text-sm text-[#dce8ff] cursor-pointer">
+          <input type="checkbox" checked={!!form.recurring} onChange={e => set('recurring', e.target.checked)} className="rounded accent-blue-600" />
           Recurring
         </label>
       </div>
       {form.paid && (
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Paid Date</label>
+          <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Paid Date</label>
           <input type="date" value={form.paid_date} onChange={e => set('paid_date', e.target.value)} className={fieldCls} />
         </div>
       )}
       <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
+        <label className="block text-xs font-medium text-[#7a9cc0] mb-1">Notes</label>
         <textarea rows={2} value={form.notes} onChange={e => set('notes', e.target.value)} className={fieldCls} />
       </div>
       <div className="flex justify-end gap-2 pt-2">
-        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900">Cancel</button>
-        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg disabled:opacity-50">
+        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-[#7a9cc0] hover:text-[#dce8ff]">Cancel</button>
+        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-lg disabled:opacity-50">
           {saving ? 'Saving…' : 'Save'}
         </button>
       </div>
@@ -261,8 +261,8 @@ function OverviewTab({ account }) {
   const [showPass, setShowPass] = useState(false)
   const infoRow = (label, value) => (
     <div key={label} className="flex flex-col">
-      <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</span>
-      <span className="text-sm text-slate-800 mt-0.5">{value || '—'}</span>
+      <span className="text-xs font-medium text-[#4a6080] uppercase tracking-wide">{label}</span>
+      <span className="text-sm text-[#dce8ff] mt-0.5">{value || '—'}</span>
     </div>
   )
 
@@ -274,31 +274,31 @@ function OverviewTab({ account }) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Basic Info */}
-        <div className="bg-white rounded-xl border border-slate-100 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-slate-700">Account Info</h3>
+        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-[#dce8ff]">Account Info</h3>
           {infoRow('Type', account.type)}
           {infoRow('Assigned To', account.assigned_to)}
           {infoRow('Instagram Handle', account.ig_handle)}
           <div className="flex flex-col">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Platforms</span>
+            <span className="text-xs font-medium text-[#4a6080] uppercase tracking-wide">Platforms</span>
             {platforms.length > 0 ? (
               <div className="flex flex-wrap gap-1 mt-1">
                 {platforms.map(p => (
-                  <span key={p} className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-full">{p}</span>
+                  <span key={p} className="px-2 py-0.5 bg-[#0f1a35] text-[#7a9cc0] text-xs rounded-full border border-[#1a2d4e]">{p}</span>
                 ))}
               </div>
-            ) : <span className="text-sm text-slate-800 mt-0.5">—</span>}
+            ) : <span className="text-sm text-[#dce8ff] mt-0.5">—</span>}
           </div>
         </div>
 
         {/* Right: Credentials + Calendar */}
-        <div className="bg-white rounded-xl border border-slate-100 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-slate-700">Login Credentials</h3>
+        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-[#dce8ff]">Login Credentials</h3>
           {infoRow('Username', account.login_user)}
           <div className="flex flex-col">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Password</span>
+            <span className="text-xs font-medium text-[#4a6080] uppercase tracking-wide">Password</span>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-sm text-slate-800 font-mono">
+              <span className="text-sm text-[#dce8ff] font-mono">
                 {account.login_pass
                   ? (showPass ? account.login_pass : '••••••••')
                   : '—'}
@@ -306,7 +306,7 @@ function OverviewTab({ account }) {
               {account.login_pass && (
                 <button
                   onClick={() => setShowPass(!showPass)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-[#4a6080] hover:text-[#7a9cc0]"
                 >
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
@@ -314,31 +314,31 @@ function OverviewTab({ account }) {
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Content Calendar</span>
+            <span className="text-xs font-medium text-[#4a6080] uppercase tracking-wide">Content Calendar</span>
             {account.content_calendar_url ? (
               <a
                 href={account.content_calendar_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-0.5 flex items-center gap-1 text-sm text-violet-600 hover:underline"
+                className="mt-0.5 flex items-center gap-1 text-sm text-blue-400 hover:underline"
               >
                 Open calendar <ExternalLink size={12} />
               </a>
-            ) : <span className="text-sm text-slate-800 mt-0.5">—</span>}
+            ) : <span className="text-sm text-[#dce8ff] mt-0.5">—</span>}
           </div>
         </div>
       </div>
 
       {/* Retainer Scope */}
       {account.retainer_scope && (
-        <div className="bg-white rounded-xl border border-slate-100 p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-2">Retainer Scope</h3>
-          <p className="text-sm text-slate-700 whitespace-pre-wrap">{account.retainer_scope}</p>
+        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-5">
+          <h3 className="text-sm font-semibold text-[#dce8ff] mb-2">Retainer Scope</h3>
+          <p className="text-sm text-[#7a9cc0] whitespace-pre-wrap">{account.retainer_scope}</p>
         </div>
       )}
 
       {/* Meta */}
-      <div className="text-xs text-slate-400 flex gap-4">
+      <div className="text-xs text-[#4a6080] flex gap-4">
         <span>Created {formatDate(account.created_at)}</span>
         <span>Updated {formatDate(account.updated_at)}</span>
       </div>
@@ -388,39 +388,39 @@ function ContentTab({ account, content, onRefresh }) {
     setDeleting(null)
   }
 
-  const selCls = 'px-3 py-1.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-violet-300'
+  const selCls = 'px-3 py-1.5 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50'
 
   return (
     <div>
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
         <select value={filterWeek} onChange={e => setFilterWeek(e.target.value)} className={selCls}>
-          <option value="">All weeks</option>
-          {weeks.map(w => <option key={w} value={w}>Week {w}</option>)}
+          <option value="" className="bg-[#0c1428]">All weeks</option>
+          {weeks.map(w => <option key={w} value={w} className="bg-[#0c1428]">Week {w}</option>)}
         </select>
         <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className={selCls}>
-          <option value="">All statuses</option>
-          {CONTENT_STATUSES.map(s => <option key={s}>{s}</option>)}
+          <option value="" className="bg-[#0c1428]">All statuses</option>
+          {CONTENT_STATUSES.map(s => <option key={s} className="bg-[#0c1428]">{s}</option>)}
         </select>
         <select value={filterPlatform} onChange={e => setFilterPlatform(e.target.value)} className={selCls}>
-          <option value="">All platforms</option>
-          {PLATFORMS.map(p => <option key={p}>{p}</option>)}
+          <option value="" className="bg-[#0c1428]">All platforms</option>
+          {PLATFORMS.map(p => <option key={p} className="bg-[#0c1428]">{p}</option>)}
         </select>
         <button
           onClick={() => setModal({ mode: 'add' })}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
+          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors"
         >
           <Plus size={15} /> Add Entry
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-12 text-slate-400 text-sm">No content entries yet.</div>
+        <div className="text-center py-12 text-[#4a6080] text-sm">No content entries yet.</div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-100 overflow-x-auto">
+        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] overflow-x-auto">
           <table className="w-full text-sm min-w-[900px]">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 uppercase tracking-wide">
+              <tr className="border-b border-[#1a2d4e] bg-[#0f1a35] text-xs font-medium text-[#4a6080] uppercase tracking-wide">
                 <th className="text-left px-4 py-3 w-16">Week</th>
                 <th className="text-left px-4 py-3 w-24">Day</th>
                 <th className="text-left px-4 py-3 w-24">Platform</th>
@@ -432,28 +432,28 @@ function ContentTab({ account, content, onRefresh }) {
                 <th className="px-4 py-3 w-20" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-[#1a2d4e]">
               {filtered.map(item => (
                 <>
                   <tr
                     key={item.id}
-                    className="hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="hover:bg-[#0f1a35] transition-colors cursor-pointer"
                     onClick={() => setExpanded(expanded === item.id ? null : item.id)}
                   >
-                    <td className="px-4 py-3 text-slate-500 font-medium">{item.week}</td>
-                    <td className="px-4 py-3 text-slate-600">{item.day}</td>
-                    <td className="px-4 py-3 text-slate-600">{item.platform}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0] font-medium">{item.week}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{item.day}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{item.platform}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${entryTypeBadgeClass(item.entry_type)}`}>
                         {item.entry_type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{item.content_pillar}</td>
-                    <td className="px-4 py-3 text-slate-700 max-w-[200px] truncate">{item.visual_direction}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{item.content_pillar}</td>
+                    <td className="px-4 py-3 text-[#dce8ff] max-w-[200px] truncate">{item.visual_direction}</td>
                     <td className="px-4 py-3">
                       {item.creative_url
-                        ? <a href={item.creative_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="flex items-center gap-1 text-violet-600 hover:underline text-xs"><ExternalLink size={12} /> View</a>
-                        : <span className="text-slate-300 text-xs">—</span>
+                        ? <a href={item.creative_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="flex items-center gap-1 text-blue-400 hover:underline text-xs"><ExternalLink size={12} /> View</a>
+                        : <span className="text-[#4a6080] text-xs">—</span>
                       }
                     </td>
                     <td className="px-4 py-3">
@@ -469,14 +469,14 @@ function ContentTab({ account, content, onRefresh }) {
                       <div className="flex items-center gap-1 justify-end">
                         <button
                           onClick={e => { e.stopPropagation(); setModal({ mode: 'edit', item }) }}
-                          className="p-1.5 text-slate-400 hover:text-violet-600 rounded hover:bg-violet-50 transition-colors"
+                          className="p-1.5 text-[#4a6080] hover:text-blue-400 rounded hover:bg-blue-500/10 transition-colors"
                         >
                           <Edit2 size={14} />
                         </button>
                         <button
                           onClick={e => { e.stopPropagation(); handleDelete(item.id) }}
                           disabled={deleting === item.id}
-                          className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-red-50 transition-colors disabled:opacity-40"
+                          className="p-1.5 text-[#4a6080] hover:text-red-400 rounded hover:bg-red-500/10 transition-colors disabled:opacity-40"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -484,31 +484,31 @@ function ContentTab({ account, content, onRefresh }) {
                     </td>
                   </tr>
                   {expanded === item.id && (
-                    <tr key={`${item.id}-exp`} className="bg-slate-50/70">
+                    <tr key={`${item.id}-exp`} className="bg-[#0f1a35]">
                       <td colSpan={9} className="px-6 py-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           {item.caption_en && (
                             <div>
-                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Caption (EN)</p>
-                              <p className="text-slate-700 whitespace-pre-wrap">{item.caption_en}</p>
+                              <p className="text-xs font-semibold text-[#4a6080] uppercase mb-1">Caption (EN)</p>
+                              <p className="text-[#dce8ff] whitespace-pre-wrap">{item.caption_en}</p>
                             </div>
                           )}
                           {item.caption_hr && (
                             <div>
-                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Caption (HR)</p>
-                              <p className="text-slate-700 whitespace-pre-wrap">{item.caption_hr}</p>
+                              <p className="text-xs font-semibold text-[#4a6080] uppercase mb-1">Caption (HR)</p>
+                              <p className="text-[#dce8ff] whitespace-pre-wrap">{item.caption_hr}</p>
                             </div>
                           )}
                           {item.hashtags && (
                             <div>
-                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Hashtags</p>
-                              <p className="text-violet-600 text-xs">{item.hashtags}</p>
+                              <p className="text-xs font-semibold text-[#4a6080] uppercase mb-1">Hashtags</p>
+                              <p className="text-blue-400 text-xs">{item.hashtags}</p>
                             </div>
                           )}
                           {item.notes && (
                             <div>
-                              <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Notes</p>
-                              <p className="text-slate-600">{item.notes}</p>
+                              <p className="text-xs font-semibold text-[#4a6080] uppercase mb-1">Notes</p>
+                              <p className="text-[#7a9cc0]">{item.notes}</p>
                             </div>
                           )}
                         </div>
@@ -582,9 +582,9 @@ function PaymentsTab({ account, payments, onRefresh }) {
             { label: 'Total Paid', value: formatCurrency(totalPaid), green: true },
             { label: 'Outstanding', value: formatCurrency(total - totalPaid), red: total - totalPaid > 0 },
           ].map(({ label, value, green, red }) => (
-            <div key={label} className="bg-white rounded-xl border border-slate-100 px-4 py-3">
-              <p className="text-xs text-slate-500">{label}</p>
-              <p className={`text-lg font-bold mt-0.5 ${green ? 'text-green-600' : red ? 'text-red-600' : 'text-slate-900'}`}>
+            <div key={label} className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] px-4 py-3">
+              <p className="text-xs text-[#4a6080]">{label}</p>
+              <p className={`text-lg font-bold mt-0.5 ${green ? 'text-green-400' : red ? 'text-red-400' : 'text-[#dce8ff]'}`}>
                 {value}
               </p>
             </div>
@@ -595,21 +595,21 @@ function PaymentsTab({ account, payments, onRefresh }) {
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setModal({ mode: 'add' })}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors"
         >
           <Plus size={15} /> Add Payment
         </button>
       </div>
 
       {accountPayments.length === 0 ? (
-        <div className="text-center py-12 text-slate-400">
+        <div className="text-center py-12 text-[#4a6080]">
           <p className="text-sm">No payments logged yet.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 uppercase tracking-wide">
+              <tr className="border-b border-[#1a2d4e] bg-[#0f1a35] text-xs font-medium text-[#4a6080] uppercase tracking-wide">
                 <th className="text-left px-4 py-3">Amount</th>
                 <th className="text-left px-4 py-3">Invoice Date</th>
                 <th className="text-left px-4 py-3">Due Date</th>
@@ -619,17 +619,17 @@ function PaymentsTab({ account, payments, onRefresh }) {
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-[#1a2d4e]">
               {accountPayments.map(p => {
                 const st = paymentStatus(p)
-                const rowCls = st === 'overdue' ? 'bg-red-50/50' : st === 'due-soon' ? 'bg-amber-50/50' : ''
+                const rowCls = st === 'overdue' ? 'bg-red-500/5' : st === 'due-soon' ? 'bg-amber-500/5' : ''
                 return (
-                  <tr key={p.id} className={`hover:bg-slate-50 transition-colors ${rowCls}`}>
-                    <td className="px-4 py-3 font-semibold text-slate-800">
+                  <tr key={p.id} className={`hover:bg-[#0f1a35] transition-colors ${rowCls}`}>
+                    <td className="px-4 py-3 font-semibold text-[#dce8ff]">
                       {formatCurrency(p.amount, p.currency)}
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{formatDate(p.invoice_date)}</td>
-                    <td className="px-4 py-3 text-slate-600">{formatDate(p.due_date)}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{formatDate(p.invoice_date)}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{formatDate(p.due_date)}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         {statusIcon(p)}
@@ -638,30 +638,30 @@ function PaymentsTab({ account, payments, onRefresh }) {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">
+                    <td className="px-4 py-3 text-[#7a9cc0]">
                       {p.recurring ? p.recurrence_period : 'One-time'}
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{p.assigned_to}</td>
+                    <td className="px-4 py-3 text-[#7a9cc0]">{p.assigned_to}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
                         <button
                           onClick={() => handleTogglePaid(p)}
                           disabled={toggling === p.id}
-                          className={`p-1.5 rounded hover:bg-green-50 transition-colors disabled:opacity-40 ${p.paid ? 'text-green-500' : 'text-slate-300 hover:text-green-500'}`}
+                          className={`p-1.5 rounded hover:bg-green-500/10 transition-colors disabled:opacity-40 ${p.paid ? 'text-green-500' : 'text-[#4a6080] hover:text-green-400'}`}
                           title={p.paid ? 'Mark unpaid' : 'Mark paid'}
                         >
                           <CheckCircle size={15} />
                         </button>
                         <button
                           onClick={() => setModal({ mode: 'edit', item: p })}
-                          className="p-1.5 text-slate-400 hover:text-violet-600 rounded hover:bg-violet-50 transition-colors"
+                          className="p-1.5 text-[#4a6080] hover:text-blue-400 rounded hover:bg-blue-500/10 transition-colors"
                         >
                           <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => handleDelete(p.id)}
                           disabled={deleting === p.id}
-                          className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-red-50 transition-colors disabled:opacity-40"
+                          className="p-1.5 text-[#4a6080] hover:text-red-400 rounded hover:bg-red-500/10 transition-colors disabled:opacity-40"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -713,34 +713,34 @@ function NotesTab({ account, onRefresh }) {
   return (
     <div className="space-y-5 max-w-2xl">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-2">Strategy / Notes</label>
+        <label className="block text-sm font-medium text-[#dce8ff] mb-2">Strategy / Notes</label>
         <textarea
           rows={10}
           value={notes}
           onChange={e => setNotes(e.target.value)}
-          className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300 resize-none"
+          className="w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 resize-none"
           placeholder="Add strategy notes, briefing info, or anything relevant…"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-2">Content Calendar URL</label>
+        <label className="block text-sm font-medium text-[#dce8ff] mb-2">Content Calendar URL</label>
         <input
           type="url"
           value={calUrl}
           onChange={e => setCalUrl(e.target.value)}
           placeholder="https://calendar.google.com/…"
-          className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300"
+          className="w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] rounded-lg text-[#dce8ff] placeholder-[#4a6080] focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
         />
       </div>
       <div className="flex items-center gap-3">
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition-colors"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition-colors"
         >
           {saving ? 'Saving…' : 'Save Notes'}
         </button>
-        {saved && <span className="text-sm text-green-600 flex items-center gap-1"><CheckCircle size={14} /> Saved</span>}
+        {saved && <span className="text-sm text-green-400 flex items-center gap-1"><CheckCircle size={14} /> Saved</span>}
       </div>
     </div>
   )
@@ -782,16 +782,16 @@ export default function AccountDetail() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <RefreshCw size={24} className="animate-spin text-violet-500" />
+      <div className="flex items-center justify-center min-h-screen bg-[#060b18]">
+        <RefreshCw size={24} className="animate-spin text-blue-500" />
       </div>
     )
   }
 
   if (error || !account) {
     return (
-      <div className="p-8">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-5 text-red-700">
+      <div className="p-8 bg-[#060b18] min-h-screen">
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 text-red-400">
           <p className="font-semibold">Error</p>
           <p className="text-sm mt-1">{error || 'Account not found'}</p>
           <Link to="/" className="mt-3 inline-block text-sm underline">← Back to dashboard</Link>
@@ -807,33 +807,33 @@ export default function AccountDetail() {
         <div className="flex items-start gap-3">
           <button
             onClick={() => navigate('/')}
-            className="mt-1 p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            className="mt-1 p-1.5 text-[#4a6080] hover:text-[#dce8ff] hover:bg-[#0f1a35] rounded-lg transition-colors"
           >
             <ArrowLeft size={18} />
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-slate-900">{account.name}</h1>
+              <h1 className="text-2xl font-bold text-[#dce8ff]">{account.name}</h1>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${typeBadgeClass(account.type)}`}>
                 {account.type}
               </span>
             </div>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Assigned to <span className="font-medium text-slate-700">{account.assigned_to || '—'}</span>
-              {account.ig_handle && <> · <span className="text-slate-400">@{account.ig_handle}</span></>}
+            <p className="text-sm text-[#4a6080] mt-0.5">
+              Assigned to <span className="font-medium text-[#7a9cc0]">{account.assigned_to || '—'}</span>
+              {account.ig_handle && <> · <span className="text-[#4a6080]">@{account.ig_handle}</span></>}
             </p>
           </div>
         </div>
         <button
           onClick={() => navigate(`/account/${id}/edit`)}
-          className="flex items-center gap-2 px-4 py-2 border border-slate-200 hover:border-violet-300 hover:text-violet-700 text-slate-600 text-sm font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 border border-[#1a2d4e] hover:border-[#243d68] hover:text-blue-400 text-[#7a9cc0] text-sm font-medium rounded-lg transition-colors"
         >
           <Edit2 size={15} /> Edit Account
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-slate-200 mb-6">
+      <div className="border-b border-[#1a2d4e] mb-6">
         <nav className="flex gap-0" aria-label="Tabs">
           {TABS.map(t => (
             <button
@@ -841,18 +841,18 @@ export default function AccountDetail() {
               onClick={() => setTab(t)}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 tab === t
-                  ? 'border-violet-600 text-violet-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                  ? 'border-blue-500 text-blue-400'
+                  : 'border-transparent text-[#4a6080] hover:text-[#7a9cc0] hover:border-[#1a2d4e]'
               }`}
             >
               {t}
               {t === 'Content' && content.filter(c => c.account_id === id).length > 0 && (
-                <span className="ml-1.5 px-1.5 py-0.5 bg-slate-100 text-slate-500 text-xs rounded-full">
+                <span className="ml-1.5 px-1.5 py-0.5 bg-[#0f1a35] text-[#7a9cc0] text-xs rounded-full border border-[#1a2d4e]">
                   {content.filter(c => c.account_id === id).length}
                 </span>
               )}
               {t === 'Payments' && payments.filter(p => p.account_id === id).length > 0 && (
-                <span className="ml-1.5 px-1.5 py-0.5 bg-slate-100 text-slate-500 text-xs rounded-full">
+                <span className="ml-1.5 px-1.5 py-0.5 bg-[#0f1a35] text-[#7a9cc0] text-xs rounded-full border border-[#1a2d4e]">
                   {payments.filter(p => p.account_id === id).length}
                 </span>
               )}

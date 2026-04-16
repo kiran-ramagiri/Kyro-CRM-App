@@ -10,18 +10,18 @@ export default function Layout({ children }) {
   const navigate = useNavigate()
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#060b18]">
       {/* Sidebar */}
-      <aside className="w-60 shrink-0 bg-slate-900 flex flex-col">
+      <aside className="w-60 shrink-0 bg-[#0c1428] border-r border-[#1a2d4e] flex flex-col">
         {/* Logo */}
-        <div className="px-6 py-6 border-b border-slate-700">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+        <div className="px-6 py-5 border-b border-[#1a2d4e]">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center glow-blue-sm">
               <span className="text-white font-bold text-sm">K</span>
             </div>
             <div>
-              <p className="text-white font-semibold text-base leading-none">Kyro</p>
-              <p className="text-slate-400 text-xs mt-0.5">Content CRM</p>
+              <p className="text-[#dce8ff] font-semibold text-base leading-none tracking-tight">Kyro</p>
+              <p className="text-[#4a6080] text-xs mt-0.5">Content CRM</p>
             </div>
           </div>
         </div>
@@ -34,26 +34,26 @@ export default function Layout({ children }) {
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-violet-600 text-white'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
+                    : 'text-[#7a9cc0] hover:text-[#dce8ff] hover:bg-[#0f1a35] border border-transparent'
                 }`
               }
             >
-              <Icon size={17} />
+              <Icon size={16} />
               {label}
             </NavLink>
           ))}
         </nav>
 
         {/* New Account button */}
-        <div className="px-3 py-4 border-t border-slate-700">
+        <div className="px-3 py-4 border-t border-[#1a2d4e]">
           <button
             onClick={() => navigate('/account/new')}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-all glow-blue-sm"
           >
-            <Plus size={16} />
+            <Plus size={15} />
             New Account
           </button>
         </div>

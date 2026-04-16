@@ -85,47 +85,47 @@ export default function AccountForm() {
     }
   }
 
-  const fieldCls = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300 bg-white'
-  const labelCls = 'block text-sm font-medium text-slate-700 mb-1.5'
+  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#060b18] border border-[#1a2d4e] text-[#dce8ff] placeholder-[#4a6080] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50'
+  const labelCls = 'block text-sm font-medium text-[#7a9cc0] mb-1.5'
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <RefreshCw size={24} className="animate-spin text-violet-500" />
+      <div className="flex items-center justify-center min-h-screen bg-[#060b18]">
+        <RefreshCw size={24} className="animate-spin text-blue-500" />
       </div>
     )
   }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="p-8 max-w-2xl mx-auto bg-[#060b18] min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <button
           onClick={() => navigate(isEdit ? `/account/${id}` : '/')}
-          className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-1.5 text-[#4a6080] hover:text-[#dce8ff] hover:bg-[#0f1a35] rounded-lg transition-colors"
         >
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-[#dce8ff]">
             {isEdit ? 'Edit Account' : 'New Account'}
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[#7a9cc0] mt-0.5">
             {isEdit ? 'Update account details' : 'Add a new client or personal brand'}
           </p>
         </div>
       </div>
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+        <div className="mb-6 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400 text-sm">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
-        <section className="bg-white rounded-xl border border-slate-100 p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Basic Info</h2>
+        <section className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-[#4a6080] uppercase tracking-wide">Basic Info</h2>
 
           <div>
             <label className={labelCls}>Account Name *</label>
@@ -156,7 +156,7 @@ export default function AccountForm() {
           <div>
             <label className={labelCls}>Instagram Handle</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">@</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a6080] text-sm">@</span>
               <input
                 value={form.ig_handle}
                 onChange={e => set('ig_handle', e.target.value.replace('@', ''))}
@@ -168,8 +168,8 @@ export default function AccountForm() {
         </section>
 
         {/* Platforms */}
-        <section className="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">Platforms</h2>
+        <section className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-6">
+          <h2 className="text-sm font-semibold text-[#4a6080] uppercase tracking-wide mb-3">Platforms</h2>
           <div className="flex flex-wrap gap-2">
             {PLATFORMS.map(p => (
               <button
@@ -178,8 +178,8 @@ export default function AccountForm() {
                 onClick={() => togglePlatform(p)}
                 className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                   form.platforms.includes(p)
-                    ? 'bg-violet-600 border-violet-600 text-white'
-                    : 'border-slate-200 text-slate-600 hover:border-violet-300 hover:text-violet-600'
+                    ? 'bg-blue-600 border-blue-600 text-white'
+                    : 'border-[#1a2d4e] text-[#7a9cc0] hover:border-blue-500/40 hover:text-blue-400 bg-[#060b18]'
                 }`}
               >
                 {p}
@@ -189,8 +189,8 @@ export default function AccountForm() {
         </section>
 
         {/* Retainer Scope */}
-        <section className="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">Retainer Scope</h2>
+        <section className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-6">
+          <h2 className="text-sm font-semibold text-[#4a6080] uppercase tracking-wide mb-3">Retainer Scope</h2>
           <textarea
             rows={4}
             value={form.retainer_scope}
@@ -201,9 +201,9 @@ export default function AccountForm() {
         </section>
 
         {/* Login Credentials */}
-        <section className="bg-white rounded-xl border border-slate-100 p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Login Credentials</h2>
-          <p className="text-xs text-slate-400 -mt-2">Stored in Google Sheet — visible only to team members with sheet access.</p>
+        <section className="bg-[#0c1428] rounded-xl border border-[#1a2d4e] p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-[#4a6080] uppercase tracking-wide">Login Credentials</h2>
+          <p className="text-xs text-[#4a6080] -mt-2">Stored in Google Sheet — visible only to team members with sheet access.</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Username</label>
@@ -242,14 +242,14 @@ export default function AccountForm() {
           <button
             type="button"
             onClick={() => navigate(isEdit ? `/account/${id}` : '/')}
-            className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 text-sm text-[#7a9cc0] hover:text-[#dce8ff]"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             {saving && <RefreshCw size={14} className="animate-spin" />}
             {saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Account'}
