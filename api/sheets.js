@@ -219,11 +219,11 @@ module.exports = async function handler(req, res) {
 
         const allData = await sheets.spreadsheets.values.get({
           spreadsheetId,
-          range: `${sheet}!A:A`,
+          range: `${sheet}!A:${columnLetter(SHEET_HEADERS[sheet].length)}`,
         });
 
         const rows = allData.data.values || [];
-        const idIdx = 0; // 'id' is always column A
+        const idIdx = rows.length > 0 ? rows[0].indexOf('id') : 0;
         const rowIndex = rows.findIndex((r, i) => i > 0 && r[idIdx] === id);
 
         if (rowIndex === -1) return res.status(404).json({ error: 'Row not found' });
