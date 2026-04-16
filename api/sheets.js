@@ -69,11 +69,16 @@ function objectToRow(headers, data, existingRow = []) {
 }
 
 async function ensureSheetTab(sheetsClient, spreadsheetId, sheetName) {
+  let needsHeaders = false;
   try {
-    await sheetsClient.spreadsheets.values.get({
+    const check = await sheetsClient.spreadsheets.values.get({
       spreadsheetId,
       range: `${sheetName}!A1:A1`,
     });
+    // Tab exists but is empty (user created it manually with no headers)
+    if (!check.data.values || check.data.values.length === 0) {
+      needsHeaders = true;
+    }
   } catch (err) {
     // Tab doesn't exist — create it
     try {
@@ -86,7 +91,10 @@ async function ensureSheetTab(sheetsClient, spreadsheetId, sheetName) {
     } catch (_) {
       // May already exist, ignore
     }
-    // Write headers
+    needsHeaders = true;
+  }
+
+  if (needsHeaders) {
     const headers = SHEET_HEADERS[sheetName];
     if (headers) {
       await sheetsClient.spreadsheets.values.update({
