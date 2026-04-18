@@ -19,9 +19,16 @@ const SHEET_HEADERS = {
     'id', 'account_id', 'amount', 'currency', 'invoice_date', 'due_date',
     'paid', 'paid_date', 'recurring', 'recurrence_period', 'assigned_to', 'notes',
   ],
+  Meetings: [
+    'id', 'account_id', 'account_name', 'title', 'date', 'time', 'location', 'notes',
+  ],
+  Subscriptions: [
+    'id', 'name', 'category', 'cost', 'currency', 'billing_cycle',
+    'next_renewal', 'url', 'notes', 'active',
+  ],
 };
 
-const BOOL_FIELDS = new Set(['paid', 'recurring']);
+const BOOL_FIELDS = new Set(['paid', 'recurring', 'active']);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -125,10 +132,18 @@ module.exports = async function handler(req, res) {
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
     // -----------------------------------------------------------------------
+    // GET  /api/sheets?sheet=_meta  → returns spreadsheet URL
     // GET  /api/sheets?sheet=Accounts
     // -----------------------------------------------------------------------
     if (req.method === 'GET') {
       const { sheet } = req.query;
+
+      if (sheet === '_meta') {
+        return res.json({
+          url: `https://docs.google.com/spreadsheets/d/${spreadsheetId}`,
+        });
+      }
+
       if (!SHEET_HEADERS[sheet]) {
         return res.status(400).json({ error: `Unknown sheet: ${sheet}` });
       }

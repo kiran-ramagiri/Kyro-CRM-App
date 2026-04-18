@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Users, CreditCard, AlertCircle, Clock, Plus,
-  Search, ChevronRight, RefreshCw,
+  Search, ChevronRight, RefreshCw, CalendarDays, Package,
 } from 'lucide-react'
-import { getAccounts, getPayments } from '../lib/api'
+import { getAccounts, getPayments, getMeetings, getSubscriptions } from '../lib/api'
 import {
   formatDate, formatCurrency, paymentStatus,
   typeBadgeClass, TEAM_MEMBERS, ACCOUNT_TYPES,
@@ -83,10 +83,134 @@ function AccountCard({ account, unpaidCount, navigate }) {
   )
 }
 
+// ---------------------------------------------------------------------------
+// Meetings widget
+// ---------------------------------------------------------------------------
+function MeetingsWidget({ meetings, accounts, navigate }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+
+  const upcoming = meetings
+    .filter(m => {
+      if (!m.date) return false
+      const d = new Date(m.date + 'T00:00:00')
+      return d >= today
+    })
+    .sort((a, b) => {
+      const diff = a.date.localeCompare(b.date)
+      if (diff !== 0) return diff
+      return (a.time || '').localeCompare(b.time || '')
+    })
+    .slice(0, 5)
+
+  if (upcoming.length === 0) return null
+
+  function daysLabel(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00')
+    const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
+    if (diff === 0) return <span className="text-[#d4d93f] font-semibold">Today</span>
+    if (diff === 1) return <span className="text-amber-400">Tomorrow</span>
+    return <span className="text-[#6b6b6b]">in {diff}d</span>
+  }
+
+  return (
+    <div className="bg-[#0c0c14] border border-[#2a2a2a] rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <CalendarDays size={15} className="text-[#d4d93f]" />
+          <h2 className="text-sm font-semibold font-display text-[#f0f0ed]">Upcoming Meetings</h2>
+        </div>
+        <span className="text-xs text-[#555]">{upcoming.length} scheduled</span>
+      </div>
+      <div className="space-y-2">
+        {upcoming.map(m => (
+          <div
+            key={m.id}
+            onClick={() => { const acc = accounts.find(a => a.id === m.account_id); if (acc) navigate(`/account/${acc.id}?tab=Meetings`) }}
+            className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-[#111114] hover:bg-[#161616] cursor-pointer transition-colors group"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-[#f0f0ed] truncate group-hover:text-[#d4d93f] transition-colors">{m.title}</p>
+              <p className="text-xs text-[#555] truncate">{m.account_name || '—'}{m.location ? ` · ${m.location}` : ''}</p>
+            </div>
+            <div className="text-right shrink-0">
+              <p className="text-xs">{daysLabel(m.date)}</p>
+              {m.time && <p className="text-xs text-[#555]">{m.time}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Subscriptions renewal widget
+// ---------------------------------------------------------------------------
+function SubscriptionsWidget({ subs, navigate }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+
+  const expiring = subs
+    .filter(s => {
+      const isActive = s.active !== false && s.active !== 'FALSE'
+      if (!isActive || !s.next_renewal) return false
+      const d = new Date(s.next_renewal + 'T00:00:00')
+      const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
+      return diff >= 0 && diff <= 30
+    })
+    .sort((a, b) => a.next_renewal.localeCompare(b.next_renewal))
+    .slice(0, 4)
+
+  if (expiring.length === 0) return null
+
+  return (
+    <div className="bg-[#0c0c14] border border-[#2a2a2a] rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Package size={15} className="text-amber-400" />
+          <h2 className="text-sm font-semibold font-display text-[#f0f0ed]">Renewals Due Soon</h2>
+        </div>
+        <button onClick={() => navigate('/subscriptions')} className="text-xs text-[#555] hover:text-[#d4d93f] flex items-center gap-1 transition-colors">
+          View all <ChevronRight size={11} />
+        </button>
+      </div>
+      <div className="space-y-2">
+        {expiring.map(s => {
+          const d = new Date(s.next_renewal + 'T00:00:00')
+          const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
+          const urgent = diff <= 7
+          return (
+            <div
+              key={s.id}
+              onClick={() => navigate('/subscriptions')}
+              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-[#111114] hover:bg-[#161616] cursor-pointer transition-colors"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-[#f0f0ed] truncate">{s.name}</p>
+                <p className="text-xs text-[#555]">{s.category} · {s.billing_cycle}</p>
+              </div>
+              <div className="text-right shrink-0">
+                <p className={`text-xs font-semibold ${urgent ? 'text-red-400' : 'text-amber-400'}`}>
+                  {diff === 0 ? 'Today' : `${diff}d`}
+                </p>
+                {s.cost && <p className="text-xs text-[#555]">{formatCurrency(s.cost, s.currency)}</p>}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Main Dashboard
+// ---------------------------------------------------------------------------
 export default function Dashboard() {
   const navigate = useNavigate()
   const [accounts, setAccounts] = useState([])
   const [payments, setPayments] = useState([])
+  const [meetings, setMeetings] = useState([])
+  const [subs, setSubs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
@@ -96,8 +220,10 @@ export default function Dashboard() {
   const load = useCallback(async () => {
     setLoading(true); setError(null)
     try {
-      const [accs, pays] = await Promise.all([getAccounts(), getPayments()])
-      setAccounts(accs); setPayments(pays)
+      const [accs, pays, mtgs, subscriptions] = await Promise.all([
+        getAccounts(), getPayments(), getMeetings(), getSubscriptions(),
+      ])
+      setAccounts(accs); setPayments(pays); setMeetings(mtgs); setSubs(subscriptions)
     } catch (e) { setError(e.message) }
     finally { setLoading(false) }
   }, [])
@@ -135,6 +261,14 @@ export default function Dashboard() {
       </div>
     </div>
   )
+
+  const showSidePanels = meetings.length > 0 || subs.some(s => {
+    const isActive = s.active !== false && s.active !== 'FALSE'
+    if (!isActive || !s.next_renewal) return false
+    const d = new Date(s.next_renewal + 'T00:00:00')
+    const now = new Date(); now.setHours(0, 0, 0, 0)
+    return Math.ceil((d - now) / (1000 * 60 * 60 * 24)) <= 30
+  })
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -198,57 +332,71 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        <div className="relative flex-1 min-w-48">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
-          <input type="text" placeholder="Search accounts…" value={search} onChange={e => setSearch(e.target.value)}
-            className={`${F} w-full pl-9`} />
-        </div>
-        <select value={filterType} onChange={e => setFilterType(e.target.value)} className={F}>
-          <option value="">All types</option>
-          {ACCOUNT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <select value={filterMember} onChange={e => setFilterMember(e.target.value)} className={F}>
-          <option value="">All team members</option>
-          {TEAM_MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
-        </select>
-        {(search || filterType || filterMember) && (
-          <button onClick={() => { setSearch(''); setFilterType(''); setFilterMember('') }}
-            className="px-3 py-2 text-sm text-[#555] hover:text-[#f0f0ed] underline">Clear</button>
-        )}
-      </div>
-
-      {/* Grid */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-20 text-[#6b6b6b]">
-          {accounts.length === 0 ? (
-            <>
-              <Users size={38} className="mx-auto mb-3 text-[#2a2a2a]" />
-              <p className="text-base font-medium text-[#f0f0ed] mb-1">No accounts yet</p>
-              <p className="text-sm mb-4">Add your first client or personal brand to get started.</p>
-              <button onClick={() => navigate('/account/new')}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#d4d93f] text-[#0a0a0b] rounded-lg text-sm font-semibold hover:bg-[#bfc42e] transition-colors">
-                <Plus size={14} /> Add Account
-              </button>
-            </>
-          ) : (
-            <>
-              <Search size={38} className="mx-auto mb-3 text-[#2a2a2a]" />
-              <p className="text-base font-medium text-[#f0f0ed] mb-1">No accounts match your filters</p>
+      {/* Main layout: accounts grid + side panels */}
+      <div className={`flex gap-6 ${showSidePanels ? 'items-start' : ''}`}>
+        {/* Left: accounts */}
+        <div className="flex-1 min-w-0">
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <div className="relative flex-1 min-w-48">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
+              <input type="text" placeholder="Search accounts…" value={search} onChange={e => setSearch(e.target.value)}
+                className={`${F} w-full pl-9`} />
+            </div>
+            <select value={filterType} onChange={e => setFilterType(e.target.value)} className={F}>
+              <option value="">All types</option>
+              {ACCOUNT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <select value={filterMember} onChange={e => setFilterMember(e.target.value)} className={F}>
+              <option value="">All team members</option>
+              {TEAM_MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+            {(search || filterType || filterMember) && (
               <button onClick={() => { setSearch(''); setFilterType(''); setFilterMember('') }}
-                className="text-sm text-[#555] hover:text-[#f0f0ed] underline">Clear filters</button>
-            </>
+                className="px-3 py-2 text-sm text-[#555] hover:text-[#f0f0ed] underline">Clear</button>
+            )}
+          </div>
+
+          {/* Grid */}
+          {filtered.length === 0 ? (
+            <div className="text-center py-20 text-[#6b6b6b]">
+              {accounts.length === 0 ? (
+                <>
+                  <Users size={38} className="mx-auto mb-3 text-[#2a2a2a]" />
+                  <p className="text-base font-medium text-[#f0f0ed] mb-1">No accounts yet</p>
+                  <p className="text-sm mb-4">Add your first client or personal brand to get started.</p>
+                  <button onClick={() => navigate('/account/new')}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#d4d93f] text-[#0a0a0b] rounded-lg text-sm font-semibold hover:bg-[#bfc42e] transition-colors">
+                    <Plus size={14} /> Add Account
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Search size={38} className="mx-auto mb-3 text-[#2a2a2a]" />
+                  <p className="text-base font-medium text-[#f0f0ed] mb-1">No accounts match your filters</p>
+                  <button onClick={() => { setSearch(''); setFilterType(''); setFilterMember('') }}
+                    className="text-sm text-[#555] hover:text-[#f0f0ed] underline">Clear filters</button>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filtered.map(account => (
+                <AccountCard key={account.id} account={account}
+                  unpaidCount={unpaidByAccount[account.id] || 0} navigate={navigate} />
+              ))}
+            </div>
           )}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(account => (
-            <AccountCard key={account.id} account={account}
-              unpaidCount={unpaidByAccount[account.id] || 0} navigate={navigate} />
-          ))}
-        </div>
-      )}
+
+        {/* Right: side panels (meetings + renewals) */}
+        {showSidePanels && (
+          <div className="w-72 shrink-0 space-y-4">
+            <MeetingsWidget meetings={meetings} accounts={accounts} navigate={navigate} />
+            <SubscriptionsWidget subs={subs} navigate={navigate} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import {
   ArrowLeft, Edit2, Eye, EyeOff, ExternalLink,
-  Plus, Trash2, CheckCircle, Clock, AlertCircle, RefreshCw,
+  Plus, Trash2, CheckCircle, Clock, AlertCircle, RefreshCw, Copy, CalendarDays,
 } from 'lucide-react'
 import {
-  getAccounts, getContent, getPayments,
+  getAccounts, getContent, getPayments, getMeetings,
   addContent, updateContent, deleteContent,
   addPayment, updatePayment, deletePayment,
+  deleteAccount,
+  addMeeting, updateMeeting, deleteMeeting,
   updateAccount,
 } from '../lib/api'
 import Modal from '../components/Modal'
@@ -255,6 +257,74 @@ function PaymentForm({ initial, accountId, onSave, onClose }) {
 }
 
 // ---------------------------------------------------------------------------
+// Meeting form (inside modal)
+// ---------------------------------------------------------------------------
+function MeetingForm({ initial, accountId, accountName, onSave, onClose }) {
+  const [form, setForm] = useState({
+    title: '',
+    date: today(),
+    time: '',
+    location: '',
+    notes: '',
+    ...initial,
+  })
+  const [saving, setSaving] = useState(false)
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      if (initial?.id) {
+        await updateMeeting(initial.id, form)
+      } else {
+        await addMeeting({ ...form, id: generateId(), account_id: accountId, account_name: accountName })
+      }
+      onSave()
+      onClose()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const fieldCls = 'w-full px-3 py-2 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50'
+  const labelCls = 'block text-xs text-[#6b6b6b] mb-1'
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className={labelCls}>Title *</label>
+        <input required value={form.title} onChange={e => set('title', e.target.value)} placeholder="e.g. Monthly check-in, Strategy call…" className={fieldCls} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelCls}>Date *</label>
+          <input required type="date" value={form.date} onChange={e => set('date', e.target.value)} className={fieldCls} />
+        </div>
+        <div>
+          <label className={labelCls}>Time</label>
+          <input type="time" value={form.time} onChange={e => set('time', e.target.value)} className={fieldCls} />
+        </div>
+      </div>
+      <div>
+        <label className={labelCls}>Location / Link</label>
+        <input value={form.location} onChange={e => set('location', e.target.value)} placeholder="e.g. Google Meet, Office, Zoom link…" className={fieldCls} />
+      </div>
+      <div>
+        <label className={labelCls}>Notes</label>
+        <textarea rows={3} value={form.notes} onChange={e => set('notes', e.target.value)} placeholder="Agenda, topics to cover…" className={fieldCls} />
+      </div>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-[#6b6b6b] hover:text-[#f0f0ed]">Cancel</button>
+        <button type="submit" disabled={saving} className="px-4 py-2 text-sm font-semibold font-display bg-[#d4d93f] hover:bg-[#bfc42e] text-[#0a0a0b] rounded-lg disabled:opacity-50">
+          {saving ? 'Saving…' : 'Save'}
+        </button>
+      </div>
+    </form>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Tab: Overview
 // ---------------------------------------------------------------------------
 function OverviewTab({ account }) {
@@ -356,11 +426,11 @@ function ContentTab({ account, content, onRefresh }) {
   const [filterWeek, setFilterWeek] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterPlatform, setFilterPlatform] = useState('')
-  const [expanded, setExpanded] = useState(null) // expanded row id
+  const [expanded, setExpanded] = useState(null)
   const [deleting, setDeleting] = useState(null)
+  const [copying, setCopying] = useState(null)
 
   const accountContent = content.filter(c => c.account_id === account.id)
-
   const weeks = [...new Set(accountContent.map(c => c.week).filter(Boolean))].sort((a,b) => Number(a)-Number(b))
 
   const filtered = accountContent.filter(c => {
@@ -386,6 +456,22 @@ function ContentTab({ account, content, onRefresh }) {
     await deleteContent(id)
     onRefresh()
     setDeleting(null)
+  }
+
+  async function handleDuplicate(item) {
+    setCopying(item.id)
+    try {
+      const { id: _id, ...rest } = item
+      await addContent({
+        ...rest,
+        id: generateId(),
+        status: 'Draft',
+        updated_at: today(),
+      })
+      onRefresh()
+    } finally {
+      setCopying(null)
+    }
   }
 
   const selCls = 'px-3 py-1.5 text-sm bg-[#0a0a0b] border border-[#2a2a2a] rounded-lg text-[#f0f0ed] focus:outline-none focus:ring-2 focus:ring-[#d4d93f]/30 focus:border-[#d4d93f]/50'
@@ -429,7 +515,7 @@ function ContentTab({ account, content, onRefresh }) {
                 <th className="text-left px-4 py-3">Visual Direction</th>
                 <th className="text-left px-4 py-3 w-20">Creative</th>
                 <th className="text-left px-4 py-3 w-24">Status</th>
-                <th className="px-4 py-3 w-20" />
+                <th className="px-4 py-3 w-24" />
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2a2a2a]">
@@ -467,6 +553,14 @@ function ContentTab({ account, content, onRefresh }) {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
+                        <button
+                          onClick={e => { e.stopPropagation(); handleDuplicate(item) }}
+                          disabled={copying === item.id}
+                          title="Duplicate entry"
+                          className="p-1.5 text-[#555] hover:text-[#d4d93f] rounded hover:bg-[#d4d93f]/10 transition-colors disabled:opacity-40"
+                        >
+                          <Copy size={13} />
+                        </button>
                         <button
                           onClick={e => { e.stopPropagation(); setModal({ mode: 'edit', item }) }}
                           className="p-1.5 text-[#555] hover:text-[#d4d93f] rounded hover:bg-[#d4d93f]/10 transition-colors"
@@ -574,7 +668,6 @@ function PaymentsTab({ account, payments, onRefresh }) {
 
   return (
     <div>
-      {/* Summary */}
       {accountPayments.length > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-4">
           {[
@@ -693,6 +786,114 @@ function PaymentsTab({ account, payments, onRefresh }) {
 }
 
 // ---------------------------------------------------------------------------
+// Tab: Meetings
+// ---------------------------------------------------------------------------
+function MeetingsTab({ account, meetings, onRefresh }) {
+  const [modal, setModal] = useState(null)
+  const [deleting, setDeleting] = useState(null)
+
+  const accountMeetings = meetings
+    .filter(m => m.account_id === account.id)
+    .sort((a, b) => {
+      const diff = (b.date || '').localeCompare(a.date || '')
+      if (diff !== 0) return diff
+      return (b.time || '').localeCompare(a.time || '')
+    })
+
+  async function handleDelete(id) {
+    if (!confirm('Delete this meeting?')) return
+    setDeleting(id)
+    await deleteMeeting(id)
+    onRefresh()
+    setDeleting(null)
+  }
+
+  const todayStr = today()
+
+  function dateBadge(dateStr) {
+    if (!dateStr) return null
+    const now = new Date(); now.setHours(0, 0, 0, 0)
+    const d = new Date(dateStr + 'T00:00:00')
+    const diff = Math.ceil((d - now) / (1000 * 60 * 60 * 24))
+    if (diff === 0) return <span className="px-2 py-0.5 rounded-full text-xs bg-[#d4d93f]/10 text-[#d4d93f] border border-[#d4d93f]/20">Today</span>
+    if (diff === 1) return <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20">Tomorrow</span>
+    if (diff > 0) return <span className="px-2 py-0.5 rounded-full text-xs bg-[#111114] text-[#6b6b6b] border border-[#2a2a2a]">In {diff}d</span>
+    return <span className="px-2 py-0.5 rounded-full text-xs bg-[#1a1a1a] text-[#555] border border-[#2a2a2a]">Past</span>
+  }
+
+  return (
+    <div>
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setModal({ mode: 'add' })}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d4d93f] hover:bg-[#bfc42e] text-[#0a0a0b] text-sm font-semibold font-display rounded-lg transition-colors"
+        >
+          <Plus size={15} /> Add Meeting
+        </button>
+      </div>
+
+      {accountMeetings.length === 0 ? (
+        <div className="text-center py-12 text-[#555]">
+          <CalendarDays size={32} className="mx-auto mb-3 text-[#2a2a2a]" />
+          <p className="text-sm">No meetings scheduled yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {accountMeetings.map(m => (
+            <div key={m.id} className="bg-[#0c0c14] border border-[#2a2a2a] rounded-xl p-4 hover:border-[#383838] transition-colors">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h4 className="font-semibold text-[#f0f0ed] text-sm">{m.title}</h4>
+                    {dateBadge(m.date)}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1.5 text-xs text-[#555]">
+                    {m.date && <span>{formatDate(m.date)}</span>}
+                    {m.time && <span>· {m.time}</span>}
+                    {m.location && <span>· {m.location}</span>}
+                  </div>
+                  {m.notes && <p className="text-xs text-[#6b6b6b] mt-2 whitespace-pre-wrap">{m.notes}</p>}
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => setModal({ mode: 'edit', item: m })}
+                    className="p-1.5 text-[#555] hover:text-[#d4d93f] rounded hover:bg-[#d4d93f]/10 transition-colors"
+                  >
+                    <Edit2 size={14} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(m.id)}
+                    disabled={deleting === m.id}
+                    className="p-1.5 text-[#555] hover:text-red-400 rounded hover:bg-red-500/10 transition-colors disabled:opacity-40"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {modal && (
+        <Modal
+          title={modal.mode === 'add' ? 'Schedule Meeting' : 'Edit Meeting'}
+          onClose={() => setModal(null)}
+        >
+          <MeetingForm
+            initial={modal.item}
+            accountId={account.id}
+            accountName={account.name}
+            onSave={onRefresh}
+            onClose={() => setModal(null)}
+          />
+        </Modal>
+      )}
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Tab: Notes
 // ---------------------------------------------------------------------------
 function NotesTab({ account, onRefresh }) {
@@ -749,28 +950,34 @@ function NotesTab({ account, onRefresh }) {
 // ---------------------------------------------------------------------------
 // Main AccountDetail page
 // ---------------------------------------------------------------------------
-const TABS = ['Overview', 'Content', 'Payments', 'Notes']
+const TABS = ['Overview', 'Content', 'Payments', 'Meetings', 'Notes']
 
 export default function AccountDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [tab, setTab] = useState('Overview')
+  const [searchParams] = useSearchParams()
+  const [tab, setTab] = useState(searchParams.get('tab') || 'Overview')
   const [account, setAccount] = useState(null)
   const [content, setContent] = useState([])
   const [payments, setPayments] = useState([])
+  const [meetings, setMeetings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [deletingAccount, setDeletingAccount] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const [accs, cont, pays] = await Promise.all([getAccounts(), getContent(), getPayments()])
+      const [accs, cont, pays, mtgs] = await Promise.all([
+        getAccounts(), getContent(), getPayments(), getMeetings(),
+      ])
       const acc = accs.find(a => a.id === id)
       if (!acc) { setError('Account not found'); return }
       setAccount(acc)
       setContent(cont)
       setPayments(pays)
+      setMeetings(mtgs)
     } catch (e) {
       setError(e.message)
     } finally {
@@ -779,6 +986,18 @@ export default function AccountDetail() {
   }, [id])
 
   useEffect(() => { load() }, [load])
+
+  async function handleDeleteAccount() {
+    if (!confirm(`Delete account "${account.name}"? This will not delete their content or payment records from Google Sheets.`)) return
+    setDeletingAccount(true)
+    try {
+      await deleteAccount(id)
+      navigate('/')
+    } catch (e) {
+      alert('Failed to delete account: ' + e.message)
+      setDeletingAccount(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -824,12 +1043,21 @@ export default function AccountDetail() {
             </p>
           </div>
         </div>
-        <button
-          onClick={() => navigate(`/account/${id}/edit`)}
-          className="flex items-center gap-2 px-4 py-2 border border-[#2a2a2a] hover:border-[#d4d93f]/40 hover:text-[#d4d93f] text-[#6b6b6b] text-sm font-medium rounded-lg transition-colors"
-        >
-          <Edit2 size={15} /> Edit Account
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(`/account/${id}/edit`)}
+            className="flex items-center gap-2 px-4 py-2 border border-[#2a2a2a] hover:border-[#d4d93f]/40 hover:text-[#d4d93f] text-[#6b6b6b] text-sm font-medium rounded-lg transition-colors"
+          >
+            <Edit2 size={15} /> Edit Account
+          </button>
+          <button
+            onClick={handleDeleteAccount}
+            disabled={deletingAccount}
+            className="flex items-center gap-2 px-4 py-2 border border-[#2a2a2a] hover:border-red-500/40 hover:text-red-400 text-[#555] text-sm font-medium rounded-lg transition-colors disabled:opacity-40"
+          >
+            <Trash2 size={15} /> {deletingAccount ? 'Deleting…' : 'Delete'}
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -856,16 +1084,22 @@ export default function AccountDetail() {
                   {payments.filter(p => p.account_id === id).length}
                 </span>
               )}
+              {t === 'Meetings' && meetings.filter(m => m.account_id === id).length > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.5 bg-[#111114] text-[#555] text-xs rounded-full border border-[#2a2a2a]">
+                  {meetings.filter(m => m.account_id === id).length}
+                </span>
+              )}
             </button>
           ))}
         </nav>
       </div>
 
       {/* Tab content */}
-      {tab === 'Overview' && <OverviewTab account={account} />}
-      {tab === 'Content'  && <ContentTab  account={account} content={content}   onRefresh={load} />}
-      {tab === 'Payments' && <PaymentsTab  account={account} payments={payments} onRefresh={load} />}
-      {tab === 'Notes'    && <NotesTab     account={account} onRefresh={load} />}
+      {tab === 'Overview'  && <OverviewTab  account={account} />}
+      {tab === 'Content'   && <ContentTab   account={account} content={content}   onRefresh={load} />}
+      {tab === 'Payments'  && <PaymentsTab  account={account} payments={payments} onRefresh={load} />}
+      {tab === 'Meetings'  && <MeetingsTab  account={account} meetings={meetings} onRefresh={load} />}
+      {tab === 'Notes'     && <NotesTab     account={account} onRefresh={load} />}
     </div>
   )
 }

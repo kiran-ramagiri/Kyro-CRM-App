@@ -1,9 +1,12 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, CreditCard, Plus } from 'lucide-react'
+import { LayoutDashboard, CreditCard, Plus, Package, ExternalLink, Sheet } from 'lucide-react'
+import { getSheetUrl } from '../lib/api'
 
 const NAV = [
-  { to: '/',         label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/payments', label: 'Payments',  icon: CreditCard },
+  { to: '/',               label: 'Dashboard',     icon: LayoutDashboard },
+  { to: '/payments',       label: 'Payments',      icon: CreditCard },
+  { to: '/subscriptions',  label: 'Subscriptions', icon: Package },
 ]
 
 const KyroLogo = () => (
@@ -15,6 +18,11 @@ const KyroLogo = () => (
 
 export default function Layout({ children }) {
   const navigate = useNavigate()
+  const [sheetUrl, setSheetUrl] = useState(null)
+
+  useEffect(() => {
+    getSheetUrl().then(url => { if (url) setSheetUrl(url) })
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-[#0a0a0b]">
@@ -47,8 +55,23 @@ export default function Layout({ children }) {
           ))}
         </nav>
 
-        {/* New Account button */}
-        <div className="px-3 py-4 border-t border-[#2a2a2a]">
+        {/* Bottom actions */}
+        <div className="px-3 py-4 border-t border-[#2a2a2a] space-y-2">
+          {/* Open Google Sheet */}
+          {sheetUrl && (
+            <a
+              href={sheetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-[#2a2a2a] text-[#6b6b6b] hover:text-[#f0f0ed] hover:border-[#383838] text-xs font-medium transition-all"
+            >
+              <Sheet size={13} />
+              Open Google Sheet
+              <ExternalLink size={11} />
+            </a>
+          )}
+
+          {/* New Account */}
           <button
             onClick={() => navigate('/account/new')}
             className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-[#d4d93f] hover:bg-[#bfc42e] text-[#0a0a0b] text-sm font-semibold font-display transition-all glow-yellow-sm"

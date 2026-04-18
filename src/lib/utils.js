@@ -71,6 +71,12 @@ export const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
 export const ENTRY_TYPES = ['Post', 'Story', 'Reel', 'GMB']
 export const CONTENT_PILLARS = ['Product Promotion', 'Lifestyle', 'Community', 'Traffic-Driving', 'Atmosphere', 'Other']
 
+export const SUBSCRIPTION_CATEGORIES = [
+  'Design Tools', 'Dev Tools', 'Marketing', 'Storage',
+  'Communication', 'Analytics', 'AI Tools', 'Other',
+]
+export const BILLING_CYCLES = ['Monthly', 'Yearly', 'Quarterly', 'One-time']
+
 // ---------------------------------------------------------------------------
 // Status badge styles
 // ---------------------------------------------------------------------------

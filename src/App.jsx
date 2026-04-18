@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import AccountDetail from './pages/AccountDetail'
 import AccountForm from './pages/AccountForm'
 import PaymentsPage from './pages/PaymentsPage'
+import SubscriptionsPage from './pages/SubscriptionsPage'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/account/:id" element={<AccountDetail />} />
           <Route path="/account/:id/edit" element={<AccountForm />} />
           <Route path="/payments" element={<PaymentsPage />} />
+          <Route path="/subscriptions" element={<SubscriptionsPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>
